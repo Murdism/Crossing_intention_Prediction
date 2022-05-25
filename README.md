@@ -1,9 +1,9 @@
 ### Table of contents
 * [ACKNOWLEDGEMENT](#ACKNOWLEDGEMENT)
 * [PIE dataset](#datasets)
-* [Environment](#Environment setup)
+* [Environment](#Environment_setup)
 * [PreProcessing](#PreProcessing)
-* [Trainining/Testing](#Training and Testing)
+* [Trainining/Testing](#Training_and_Testing)
 * [Refereces ](#Refereces)
 
 
@@ -64,7 +64,7 @@ You will find : image_set_nums = {'train': ['set01', 'set02', 'set04'],
                                   'set04', 'set05', 'set06']}
 change according to the datasets you have 
 
-<a name="Environment setup"></a>
+<a name="Environment_setup"></a>
 If you have conda you can clone environment used for training as follows:
 ``` conda env create -f environment.yml ```
 After creating environment, it can be activated by:
@@ -86,7 +86,7 @@ After images are extracted run data preprocessing -> this will create train,vali
 This will create filnames and labels for each type (training,test,validation)....filenames and labels can either be shuffled or normal
 
 
-<a name="Training and Testing"></a>
+<a name="Training_and_Testing"></a>
 To train and test the model run:
 ``` python transformer.py ``` 
 In the main function (transformer.py)--> the type of data to be used can be selected such as shuffled or not shuffled
