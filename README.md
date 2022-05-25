@@ -65,6 +65,7 @@ You will find : image_set_nums = {'train': ['set01', 'set02', 'set04'],
 change according to the datasets you have 
 
 <a name="Environment_setup"></a>
+## Environment_setup 
 If you have conda you can clone environment used for training as follows:
 ``` conda env create -f environment.yml ```
 After creating environment, it can be activated by:
@@ -73,7 +74,7 @@ If conda is not avilable you can install all dependencies from enironment.yml an
 
 
 <a name="PreProcessing"></a>
-
+## PreProcessing 
 The first step is after downloading the Videos should be split into individual frames for training. 
 To split videos into frames:  change the pie_path in image_extract to the path of the dataset... .../PIE_dataset then run:
 ``` python image_extract.py ```   Extracted images should be in folder PIE_dataset/images
@@ -87,6 +88,7 @@ This will create filnames and labels for each type (training,test,validation)...
 
 
 <a name="Training_and_Testing"></a>
+## Training_and_Testing
 To train and test the model run:
 ``` python transformer.py ``` 
 In the main function (transformer.py)--> the type of data to be used can be selected such as shuffled or not shuffled
@@ -94,6 +96,7 @@ e.g for shuffled training set use train__filenames_shuffled and train_labels_shu
 If shuffled sets are not created after data_preprocessing...go to data_preprocessing.py and change save_shuffled to True when calling image processing function
 
 <a name="References"></a>
+## References
 * ** https://github.com/jeonsworld/ViT-pytorch/blob/main/train.py       VIT
 * **https://medium.com/@mrgarg.rajat/training-on-large-datasets-that-dont-fit-in-memory-in-keras-60a974785d71  data preprocessing
 * @inproceedings{rasouli2017they,
