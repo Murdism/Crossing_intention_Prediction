@@ -100,8 +100,8 @@ If shuffled sets are not created after data_preprocessing...go to data_preproces
 <a name="References"></a>
 ## References
 *  PIE PREDICT: https://github.com/aras62/PIEPredict
-*  https://github.com/jeonsworld/ViT-pytorch/blob/main/train.py       VIT
-*  https://medium.com/@mrgarg.rajat/training-on-large-datasets-that-dont-fit-in-memory-in-keras-60a974785d71  data preprocessing
+*  VIT : https://github.com/jeonsworld/ViT-pytorch/blob/main/train.py       
+*  data preprocessing : https://medium.com/@mrgarg.rajat/training-on-large-datasets-that-dont-fit-in-memory-in-keras-60a974785d71 
 * @inproceedings{rasouli2017they,
   title={PIE: A Large-Scale Dataset and Models for Pedestrian Intention Estimation and Trajectory Prediction},
   author={Rasouli, Amir and Kotseruba, Iuliia and Kunic, Toni and Tsotsos, John K},
