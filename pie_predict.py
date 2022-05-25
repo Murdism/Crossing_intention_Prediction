@@ -27,7 +27,8 @@ from keras.layers import Concatenate, Multiply, Dropout
 from keras.layers.recurrent import LSTM
 from keras.models import Model, load_model
 from keras.callbacks import ReduceLROnPlateau, EarlyStopping, ModelCheckpoint
-from keras.optimizers import RMSprop
+#from keras.optimizers import RMSprop
+from tensorflow.keras.optimizers import RMSprop
 from keras import regularizers
 
 class PIEPredict(object):

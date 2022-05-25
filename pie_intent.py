@@ -38,7 +38,8 @@ from keras.layers import RepeatVector
 from keras.layers.recurrent import LSTM
 from keras.models import Model
 from keras.models import load_model
-from keras.optimizers import RMSprop
+# from keras.optimizers import RMSprop
+from tensorflow.keras.optimizers import RMSprop
 from keras.preprocessing.image import img_to_array
 from keras.preprocessing.image import load_img
 from sklearn.metrics import accuracy_score
@@ -50,7 +51,8 @@ from utils import *
 #from utilities.jaad_utilities import *
 #from utilities.train_utilities import *
 
-K.set_image_dim_ordering('tf')
+#K.set_image_dim_ordering('tf')
+K.set_image_data_format('channels_last')
 
 
 class PIEIntent(object):
@@ -124,7 +126,7 @@ class PIEIntent(object):
                  file_name='',
                  data_subset='',
                  data_type='',
-                 save_root_folder=os.environ['PIE_PATH'] + '/data/'):
+                 save_root_folder=os.environ['PIE_PATH'] ):# + '/data/'
         """
         A path generator method for saving model and config data. Creates directories
         as needed.
@@ -217,8 +219,8 @@ class PIEIntent(object):
         cropped to 1.5x the size of the bounding box, padded and resized to
         (224, 224) and fed into pretrained VGG16.
         :param img_sequences: a list of frame names
-        :param bbox_sequences: a list of corresponding bounding boxes
-        :ped_ids: a list of pedestrian ids associated with the sequences
+        :param bbox_sequences: a list of corresponding bounding boxeeqs
+        :ped_ids: a list of pedestrian ids associated with the suences
         :save_path: path to save the precomputed features
         :data_type: train/val/test data set
         :regen_pkl: if set to True overwrites previously saved features
@@ -230,17 +232,25 @@ class PIEIntent(object):
             convnet = self.context_model
         except:
             raise Exception("No context model is defined")
-
+        
+        # print("--------------------------IMAGE Features -----------------------------------")
+        # print(img_sequences[])
         sequences = []
         i = -1
         for seq, pid in zip(img_sequences, ped_ids):
+            # print("--------------------------image Features -----------------------------------",seq)
+            # print("--------------------------Ped Features -----------------------------------",pid)
             i += 1
             update_progress(i / len(img_sequences))
             img_seq = []
             for imp, b, p in zip(seq, bbox_sequences[i], pid):
+                #print("Generating Murdi: ",imp)
                 set_id = imp.split('/')[-3]
+                print('set_id : ', set_id)
                 vid_id = imp.split('/')[-2]
+                print('vid_id : ', vid_id)
                 img_name = imp.split('/')[-1].split('.')[0]
+                print('img_name : ', img_name)
                 img_save_folder = os.path.join(save_path, set_id, vid_id)
                 img_save_path = os.path.join(img_save_folder, img_name+'_'+p[0]+'.pkl')
                 

@@ -1,49 +1,19 @@
-# Pedestrian intention and trajectory estimation
-
-<p align="center">
-<img src="pie_predict_diagram.png" alt="pie_predict" align="middle" width="600"/>
-</p>
-
-
-This repository contains Python code and pretrained models for pedestrian intention and trajectory estimation presented in our paper [**A. Rasouli, I. Kotseruba, T. Kunic, and J. Tsotsos, "PIE: A Large-Scale Dataset and Models for Pedestrian Intention Estimation and Trajectory Prediction", ICCV 2019.**](https://openaccess.thecvf.com/content_ICCV_2019/papers/Rasouli_PIE_A_Large-Scale_Dataset_and_Models_for_Pedestrian_Intention_Estimation_ICCV_2019_paper.pdf)
-
-
 ### Table of contents
-* [Dependencies](#dependencies)
-* [PIE dataset](#PIE_dataset)
-* [Train](#train)
-* [Test](#test)
-* [Citation](#citation)
-* [Corresponding authors](#authors)
-* [License](#license)
+* [ACKNOWLEDGEMENT](#ACKNOWLEDGEMENT)
+* [PIE dataset](#datasets)
+* [Environment](#Environment setup)
+* [PreProcessing](#PreProcessing)
+* [Trainining/Testing](#Training and Testing)
+* [Refereces ](#Refereces)
 
 
-<a name="dependencies"></a>
-## Dependencies
-The interface is written and tested on Ubuntu 16.04 with Python 3.5, CUDA 9 and cuDNN 7. The interface also requires
-the following external libraries:<br/>
-* tensorflow (tested with 1.9 and 1.14)
-* keras (tested with 2.1 and 2.2)
-* scikit-learn
-* numpy
-* pillow
-
-To install via virtual environment (recommended) follow these steps:
-
-- Install virtual environment `sudo apt-get install virtualenv`.
-
-- Create a virtual environment with Python3:
-
-```
-> virtualenv --system-site-packages -p python3 ./venv
-> source venv/bin/activate
-```
-- Install dependencies:
-`pip3 install -r requirements.txt`
-
+<a name="ACKNOWLEDGEMENT"></a>
+PIE preprocessing part is provided by PIE dataset creators but slight changes have been done to suit this task 
+'data_preprocessing.py' is a combination of PIE dataset provided methods and custom methods for pre-processing
 
 <a name="datasets"></a>
 ## PIE Dataset
+For This task PIE dataset is used: 
 The code is trained and tested with [Pedestrian Intention Estimation (PIE) dataset](http://data.nvision2.eecs.yorku.ca/PIE_dataset/).
 
 Download annotations and video clips from the [PIE webpage](http://data.nvision2.eecs.yorku.ca/PIE_dataset/) and place them in the `PIE_dataset` directory. The folder structure should look like this:
@@ -51,6 +21,14 @@ Download annotations and video clips from the [PIE webpage](http://data.nvision2
 ```
 PIE_dataset
     annotations
+        set01
+        set02
+        ...
+    annotations_attributes
+        set01
+        set02
+        ...
+    annotations_vehicle
         set01
         set02
         ...
@@ -68,54 +46,59 @@ Create environment variables for PIE data root and add them to your `.bashrc`:
 ```
 export PIE_PATH=/path/to/PIE/data/root
 export PIE_RAW_PATH=/path/to/PIE/data/PIE_clips/
+
+In this case:
+export PIE_PATH=PIE_dataset
+export PIE_RAW_PATH=PIE_dataset/PIE_clips
 ```
 
-Download PIE data interface `pie_data.py` from [PIE github](https://github.com/aras62/PIE).
+
+For training set01, set02 and Set04 were used for testing Set03 (videos 1-11) were used.
+For the same setting as trained in my model you can ignore Set05 , Set06 and also Set03 (videos after 11)
+If some videos are removed, their respective annotations should be removed (annotations,annotations_vehicle,annotations_attributes)
+To set up datasets used for training / testing go to _get_image_set_ids in pie_data
+You will find : image_set_nums = {'train': ['set01', 'set02', 'set04'],
+                          'val': ['set05', 'set06'],
+                          'test': ['set03'],
+                          'all': ['set01', 'set02', 'set03',
+                                  'set04', 'set05', 'set06']}
+change according to the datasets you have 
+
+<a name="Environment setup"></a>
+If you have conda you can clone environment used for training as follows:
+``` conda env create -f environment.yml ```
+After creating environment, it can be activated by:
+ ``` conda activate transformer_intent ```
+If conda is not avilable you can install all dependencies from enironment.yml and requirements.txt manually
 
 
-<a name="train"></a>
-## Train
+<a name="PreProcessing"></a>
 
-To train all models from scratch and evaluate them on the test data use this command:
-```
-python train_test.py 1
-```
-This will train intention, speed and trajectory models separately and evaluate them on the test data.
+The first step is after downloading the Videos should be split into individual frames for training. 
+To split videos into frames:  change the pie_path in image_extract to the path of the dataset... .../PIE_dataset then run:
+``` python image_extract.py ```   Extracted images should be in folder PIE_dataset/images
 
-_Note: training intention model uses image data and requires 32GB RAM.
+In data_preprocessing main function change
+``` data_path = path /to /PIE_dataset ```  
 
-Due to the random initialization of the networks and minor changes to the annotations there might be slight variation in the results.
+After images are extracted run data preprocessing -> this will create train,validation and test data 
+``` python data_preprocessing.py ``` 
+This will create filnames and labels for each type (training,test,validation)....filenames and labels can either be shuffled or normal
 
-<a name="test"></a>
-## Test
 
-To reproduce the results of our best model which combines pedestrian intention and vehicle speed for pedestrian trajectory prediction run this command:
+<a name="Training and Testing"></a>
+To train and test the model run:
+``` python transformer.py ``` 
+In the main function (transformer.py)--> the type of data to be used can be selected such as shuffled or not shuffled
+e.g for shuffled training set use train__filenames_shuffled and train_labels_shuffled the same can be done for validation and test
+If shuffled sets are not created after data_preprocessing...go to data_preprocessing.py and change save_shuffled to True when calling image processing function
 
-```
-python train_test.py 2
-```
-
-<a name="citation"></a>
-## Citation
-If you use our dataset and/or models, please cite:
-```
-@inproceedings{rasouli2017they,
+<a name="References"></a>
+* ** https://github.com/jeonsworld/ViT-pytorch/blob/main/train.py       VIT
+* **https://medium.com/@mrgarg.rajat/training-on-large-datasets-that-dont-fit-in-memory-in-keras-60a974785d71  data preprocessing
+* @inproceedings{rasouli2017they,
   title={PIE: A Large-Scale Dataset and Models for Pedestrian Intention Estimation and Trajectory Prediction},
   author={Rasouli, Amir and Kotseruba, Iuliia and Kunic, Toni and Tsotsos, John K},
   booktitle={ICCV},
   year={2019}
 }
-
-```
-<a name="authors"></a>
-## Corresponding authors
-
-* **[Amir Rasouli](https://aras62.github.io/)**
-* **[Iuliia Kotseruba](http://www.cse.yorku.ca/~yulia_k/)**
-
-Should you have any questions about downloading and using the data or the models, please feel free to raise an issue or send an email to arasouli.ai@gmail.com or yulia_k@eecs.yorku.ca.
-
-
-<a name="license"></a>
-## License
-This project is licensed under the Apache 2.0 License - see the [LICENSE](LICENSE) file for details
