@@ -92,6 +92,7 @@ This will create filnames and labels for each type (training,test,validation)...
 ## Training_and_Testing
 To train and test the model run:
 ``` python transformer.py ``` 
+
 In the main function (transformer.py)--> the type of data to be used can be selected such as shuffled or not shuffled
 e.g for shuffled training set use train__filenames_shuffled and train_labels_shuffled the same can be done for validation and test
 If shuffled sets are not created after data_preprocessing...go to data_preprocessing.py and change save_shuffled to True when calling image processing function
